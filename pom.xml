@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.rtbhouse</groupId>
 	<artifactId>kafka-graphite-reporter</artifactId>
-	<version>1.2</version>
+	<version>1.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>kafka-graphite-reporter</name>
@@ -11,7 +11,7 @@
 	<properties>
 		<codahale.metrics.version>3.1.2</codahale.metrics.version>
 		<yammer.metrics.version>2.2.0</yammer.metrics.version>
-		<apache.kafka.version>0.10.2.1</apache.kafka.version>
+		<apache.kafka.version>1.0.0</apache.kafka.version>
 		<junit.version>4.11</junit.version>
 	</properties>
 
@@ -77,7 +77,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
+			<artifactId>kafka_2.11</artifactId>
 			<version>${apache.kafka.version}</version>
 			<scope>provided</scope>
 		</dependency>
