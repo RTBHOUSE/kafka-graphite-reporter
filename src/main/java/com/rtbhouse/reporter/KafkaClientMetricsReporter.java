@@ -14,33 +14,23 @@ import com.codahale.metrics.graphite.GraphiteReporter;
 
 public class KafkaClientMetricsReporter implements MetricsReporter {
 
-    private static final String PREFIX = "kafka.server";
+    private GraphiteConfig config;
 
-    private GraphiteReporter graphiteReporter;
-    private boolean isInitialized = false;
     private MetricRegistry metricRegistry;
+    private GraphiteReporter graphiteReporter;
+
+    private boolean isInitialized = false;
 
     @Override
     public synchronized void configure(Map<String, ?> configs) {
-        String graphiteDomain = getOrDefault(configs, ConfigurationConsts.REPORTER_GRAPHITE_DOMAIN, "metrics");
-        String graphitHost = getOrDefault(configs, ConfigurationConsts.REPORTER_GRAPHITE_HOST, "");
-        Integer graphitePort = Integer
-                .valueOf(getOrDefault(configs, ConfigurationConsts.REPORTER_GRAPHITE_PORT, "2003"));
-        buildMetricsReporter(graphiteDomain, graphitHost, graphitePort);
-    }
-
-    private <T> T getOrDefault(Map<String, ?> configs, String key, T defaultValue) {
-        Object value = configs.get(key);
-        return value != null ? (T) value : defaultValue;
-    }
-
-    private void buildMetricsReporter(String graphiteDomain, String graphitHost, Integer graphitePort) {
+        config = new GraphiteConfig(configs);
         metricRegistry = new MetricRegistry();
-        Graphite graphite = new Graphite(new InetSocketAddress(graphitHost, graphitePort));
         graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
-                .prefixedWith(graphiteDomain)
+                .prefixedWith(config.getString(GraphiteConfig.REPORTER_GRAPHITE_DOMAIN))
                 .convertRatesTo(TimeUnit.SECONDS).convertDurationsTo(TimeUnit.MILLISECONDS)
-                .build(graphite);
+                .build(new Graphite(new InetSocketAddress(
+                        config.getString(GraphiteConfig.REPORTER_GRAPHITE_HOST),
+                        config.getInt(GraphiteConfig.REPORTER_GRAPHITE_PORT))));
     }
 
     @Override
@@ -83,7 +73,7 @@ public class KafkaClientMetricsReporter implements MetricsReporter {
     }
 
     private String getMetricName(KafkaMetric metric) {
-        StringBuilder sb = new StringBuilder(PREFIX + ".");
+        StringBuilder sb = new StringBuilder(config.getString(GraphiteConfig.REPORTER_GRAPHITE_PREFIX) + ".");
         sb.append(metric.metricName().group());
         for (Map.Entry<String, String> entry : metric.metricName().tags().entrySet()) {
             if (entry.getKey().length() > 0 || entry.getValue().length() > 0) {

@@ -1,7 +1,7 @@
 Kafka Graphite Reporter
 =======================
 
-This is a simple kafka plugin reporting several metrics to graphite. It work with kafka 0.10.x.
+This is a simple kafka plugin reporting several metrics to graphite. It works with kafka 0.10.x.
 
 There are several similar tools present on the market, but metrics reported by this plugin
 are in line with metrics exposed by kafka through jmx. This feature makes transition from
@@ -29,4 +29,5 @@ You should also configure the reporter, by setting the following properties:
 	reporter.graphite.domain
 	reporter.graphite.host
 	reporter.graphite.port
+	reporter.graphite.prefix
 
