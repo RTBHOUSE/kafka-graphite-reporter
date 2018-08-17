@@ -21,12 +21,12 @@ public class KafkaMetricsReporter implements kafka.metrics.KafkaMetricsReporter 
 
         try {
             logger.info("Starting kafka reporter");
-            String graphiteDomain = props.getString(ConfigurationConsts.REPORTER_GRAPHITE_DOMAIN, "metrics");
-            String graphitHost = props.getString(ConfigurationConsts.REPORTER_GRAPHITE_HOST, "");
-            Integer graphitePort = props.getInt(ConfigurationConsts.REPORTER_GRAPHITE_PORT, 2003);
-            GraphiteReporter graphiteReporter = new RTBGraphiteReporter(Metrics.defaultRegistry(), graphitHost,
-                    graphitePort,
-                    graphiteDomain);
+            GraphiteConfig config = new GraphiteConfig(props.props());
+            GraphiteReporter graphiteReporter = new RTBGraphiteReporter(
+                    Metrics.defaultRegistry(),
+                    config.getString(GraphiteConfig.REPORTER_GRAPHITE_HOST),
+                    config.getInt(GraphiteConfig.REPORTER_GRAPHITE_PORT),
+                    config.getString(GraphiteConfig.REPORTER_GRAPHITE_DOMAIN));
             graphiteReporter.start(1, TimeUnit.MINUTES);
         } catch (IOException e) {
             logger.error("Cannot start KafkaMetricsReporter.");
