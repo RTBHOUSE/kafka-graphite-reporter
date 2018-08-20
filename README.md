@@ -1,7 +1,7 @@
 Kafka Graphite Reporter
 =======================
 
-This is a simple kafka plugin reporting several metrics to graphite. It works with kafka 0.10.x.
+This is a simple kafka plugin reporting several metrics to graphite. It works with kafka 1.0.0.
 
 There are several similar tools present on the market, but metrics reported by this plugin
 are in line with metrics exposed by kafka through jmx. This feature makes transition from
@@ -21,13 +21,18 @@ Configuration
 
 To activate the reporter add the following entries to the 'server.properties' file of you broker installation:
 
-	kafka.metrics.reporters=com.rtbhouse.reporter.KafkaMetricsReporter
 	metric.reporters=com.rtbhouse.reporter.KafkaClientMetricsReporter
+	kafka.metrics.reporters=com.rtbhouse.reporter.KafkaMetricsReporter
+
+The first one, metric.reporters setting is describe in kafka docs in [broker configs](https://kafka.apache.org/documentation/#brokerconfigs) section. The same reporter could be used not only for brokers but also for consumers and producers. The second one, kafka.metrics.reporters setting is not exposed directly in kafka docs but is used in [KafkaMetricsConfig](https://github.com/apache/kafka/blob/trunk/core/src/main/scala/kafka/metrics/KafkaMetricsConfig.scala) class.
 
 You should also configure the reporter, by setting the following properties:
 
-	reporter.graphite.domain
 	reporter.graphite.host
 	reporter.graphite.port
-	reporter.graphite.prefix
 
+You could also set optional properties:
+
+	reporter.graphite.domain     # default is "metrics"
+	reporter.graphite.prefix     # default is "kafka.server"
+	reporter.graphite.use.host   # default is false

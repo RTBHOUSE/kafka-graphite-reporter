@@ -26,7 +26,7 @@ public class KafkaClientMetricsReporter implements MetricsReporter {
         config = new GraphiteConfig(configs);
         metricRegistry = new MetricRegistry();
         graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
-                .prefixedWith(config.getString(GraphiteConfig.REPORTER_GRAPHITE_DOMAIN))
+                .prefixedWith(getDomainPrefix())
                 .convertRatesTo(TimeUnit.SECONDS).convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build(new Graphite(new InetSocketAddress(
                         config.getString(GraphiteConfig.REPORTER_GRAPHITE_HOST),
@@ -70,6 +70,14 @@ public class KafkaClientMetricsReporter implements MetricsReporter {
         if (metricRegistry.getMetrics().containsKey(metricName)) {
             metricRegistry.remove(metricName);
         }
+    }
+
+    private String getDomainPrefix() {
+        String prefix = config.getString(GraphiteConfig.REPORTER_GRAPHITE_DOMAIN);
+        if (config.getBoolean(GraphiteConfig.REPORTER_GRAPHITE_USE_HOST)) {
+            prefix += "." + HostNameHelper.getShortHostName();
+        }
+        return prefix;
     }
 
     private String getMetricName(KafkaMetric metric) {
