@@ -1,5 +1,7 @@
 package com.rtbhouse.reporter;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +9,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.common.metrics.KafkaMetric;
 import org.apache.kafka.common.metrics.MetricsReporter;
+import org.slf4j.Logger;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
 
 public class KafkaClientMetricsReporter implements MetricsReporter {
+
+    private static final Logger logger = getLogger(KafkaClientMetricsReporter.class);
 
     private GraphiteConfig config;
 
@@ -62,7 +67,17 @@ public class KafkaClientMetricsReporter implements MetricsReporter {
 
     private void updateMetric(KafkaMetric metric) {
         removeMetric(metric);
-        metricRegistry.register(getMetricName(metric), new GaugeAdapter(metric));
+        if (hasNumberValue(metric)) {
+            metricRegistry.register(getMetricName(metric), new GaugeDouble(metric));
+        } else {
+            logger.warn("{} of value type [{}] cannot be registered as Gauge<Double> (skip metric registration)",
+                    metric.metricName(),
+                    metric.metricValue().getClass().getName());
+        }
+    }
+
+    private boolean hasNumberValue(KafkaMetric metric) {
+        return metric.metricValue() instanceof Number;
     }
 
     private void removeMetric(KafkaMetric metric) {
