@@ -2,6 +2,8 @@ package com.rtbhouse.reporter;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.util.Optional;
+
 import org.apache.kafka.common.metrics.KafkaMetric;
 import org.slf4j.Logger;
 
@@ -20,11 +22,11 @@ public class GaugeAdapter implements Gauge<Double> {
     @Override
     public Double getValue() {
         try {
-            double value = (double) this.metric.metricValue();
-            return Double.isNaN(value) ? 0. : value;
+            double value = (double) Optional.ofNullable(metric.metricValue()).orElse(0.0);
+            return Double.isNaN(value) ? 0.0 : value;
         } catch (ClassCastException e) {
             logger.warn("Cannot cast (return 0.0)", e);
-            return 0.;
+            return 0.0;
         }
     }
 
