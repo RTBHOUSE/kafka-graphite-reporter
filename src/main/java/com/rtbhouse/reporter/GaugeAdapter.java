@@ -21,11 +21,13 @@ public class GaugeAdapter implements Gauge<Double> {
 
     @Override
     public Double getValue() {
+        Object metricValue = null;
         try {
-            double value = (double) Optional.ofNullable(metric.metricValue()).orElse(0.0);
+            metricValue = metric.metricValue();
+            double value = (double) Optional.ofNullable(metricValue).orElse(0.0);
             return Double.isNaN(value) ? 0.0 : value;
         } catch (ClassCastException e) {
-            logger.warn("Cannot cast (return 0.0)", e);
+            logger.warn("Cannot cast metric [{}] value [{}] (return 0.0)", metric.metricName(),  metricValue, e);
             return 0.0;
         }
     }
