@@ -1,11 +1,29 @@
 Kafka Graphite Reporter
 =======================
 
-This is a simple kafka plugin reporting several metrics to graphite. It works with kafka 2.0.1.
+This is a simple kafka plugin reporting several metrics to graphite. It works with kafka 2.0.1+.
 
 There are several similar tools present on the market, but metrics reported by this plugin
 are in line with metrics exposed by kafka through jmx. This feature makes transition from
 tools like [jmxtrans](https://github.com/jmxtrans/jmxtrans) easier.
+
+Version
+------------
+
+Current version is **1.11**
+
+Distribution
+------------
+
+Releases are distributed on [Maven central](https://repo1.maven.org/maven2/com/rtbhouse/kafka-graphite-reporter/):
+
+```xml
+<dependency>
+    <groupId>com.rtbhouse</groupId>
+    <artifactId>kafka-graphite-reporter</artifactId>
+    <version>1.11</version>
+</dependency>
+```
 
 Installation On Broker
 ------------
