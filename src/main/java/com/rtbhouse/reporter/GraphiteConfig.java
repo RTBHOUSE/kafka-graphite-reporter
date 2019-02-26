@@ -1,11 +1,11 @@
 package com.rtbhouse.reporter;
 
-import java.util.Map;
-
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigDef.Importance;
 import org.apache.kafka.common.config.ConfigDef.Type;
+
+import java.util.Map;
 
 public class GraphiteConfig extends AbstractConfig {
 

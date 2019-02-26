@@ -1,19 +1,18 @@
 package com.rtbhouse.reporter;
 
-import static org.slf4j.LoggerFactory.getLogger;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.graphite.Graphite;
+import com.codahale.metrics.graphite.GraphiteReporter;
+import org.apache.kafka.common.metrics.KafkaMetric;
+import org.apache.kafka.common.metrics.MetricsReporter;
+import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.kafka.common.metrics.KafkaMetric;
-import org.apache.kafka.common.metrics.MetricsReporter;
-import org.slf4j.Logger;
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.graphite.Graphite;
-import com.codahale.metrics.graphite.GraphiteReporter;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class KafkaClientMetricsReporter implements MetricsReporter {
 

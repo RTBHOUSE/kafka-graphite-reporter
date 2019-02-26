@@ -1,8 +1,7 @@
 package com.rtbhouse.reporter;
 
-import org.apache.kafka.common.metrics.KafkaMetric;
-
 import com.codahale.metrics.Gauge;
+import org.apache.kafka.common.metrics.KafkaMetric;
 
 public class GaugeDouble implements Gauge<Double> {
 

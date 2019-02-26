@@ -27,6 +27,9 @@ public class KafkaMetricsReporter implements kafka.metrics.KafkaMetricsReporter 
                     config.getString(GraphiteConfig.REPORTER_GRAPHITE_HOST),
                     config.getInt(GraphiteConfig.REPORTER_GRAPHITE_PORT),
                     config.getString(GraphiteConfig.REPORTER_GRAPHITE_DOMAIN));
+
+            // disabling duplicate jvm metrics, which also cause problems with JDK9+
+            graphiteReporter.printVMMetrics = false;
             graphiteReporter.start(1, TimeUnit.MINUTES);
         } catch (IOException e) {
             logger.error("Cannot start KafkaMetricsReporter.");
